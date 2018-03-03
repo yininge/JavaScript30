@@ -1,26 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>JS + CSS Clock</title>
 </head>
+
 <body>
 
 
-    <div class="clock">
-      <div class="clock-face">
-        <div class="hand hour-hand"></div>
-        <div class="hand min-hand"></div>
-        <div class="hand second-hand"></div>
-      </div>
+  <div class="clock">
+    <div class="clock-face">
+      <div data-deg=90 class="hand hour-hand"></div>
+      <div data-deg=90 class="hand min-hand"></div>
+      <div data-deg=90 class="hand second-hand"></div>
     </div>
+  </div>
+  <div>
+    <button class="button" onclick="start()">Start</button>
+    <button class="button" onclick="stop()">Stop</button>
+  </div>
 
 
   <style>
     html {
-      background:#018DED url(http://unsplash.it/1500/1000?image=881&blur=50);
-      background-size:cover;
-      font-family:'helvetica neue';
+      background: #018DED url(http://unsplash.it/1500/1000?image=881&blur=50);
+      background-size: cover;
+      font-family: 'helvetica neue';
       text-align: center;
       font-size: 10px;
     }
@@ -28,47 +34,109 @@
     body {
       margin: 0;
       font-size: 2rem;
-      display:flex;
-      flex:1;
+      display: flex;
+      flex: 1;
       min-height: 100vh;
       align-items: center;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 15px 25px;
+      font-size: 24px;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      outline: none;
+      color: #fff;
+      background-color: #4CAF50;
+      border: none;
+      border-radius: 15px;
+      box-shadow: 0 9px #999;
+    }
+
+    .button:hover {background-color: #3e8e41}
+
+    .button:active {
+      background-color: #3e8e41;
+      box-shadow: 0 5px #666;
+      transform: translateY(4px);
     }
 
     .clock {
       width: 30rem;
       height: 30rem;
-      border:20px solid white;
-      border-radius:50%;
-      margin:50px auto;
+      border: 20px solid white;
+      border-radius: 50%;
+      margin: 50px auto;
       position: relative;
-      padding:2rem;
-      box-shadow:
-        0 0 0 4px rgba(0,0,0,0.1),
-        inset 0 0 0 3px #EFEFEF,
-        inset 0 0 10px black,
-        0 0 10px rgba(0,0,0,0.2);
+      padding: 2rem;
+      box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.1),
+      inset 0 0 0 3px #EFEFEF,
+      inset 0 0 10px black,
+      0 0 10px rgba(0, 0, 0, 0.2);
     }
 
     .clock-face {
       position: relative;
       width: 100%;
       height: 100%;
-      transform: translateY(-3px); /* account for the height of the clock hands */
+      transform: translateY(-3px);
+      /* account for the height of the clock hands */
     }
 
     .hand {
-      width:50%;
-      height:6px;
-      background:black;
+      width: 50%;
+      height: 6px;
+      background: black;
       position: absolute;
-      top:50%;
+      top: 50%;
+      transform-origin: 100%;
+      transform: rotate(90deg);
+      transition-timing-function: cubic-bezier(0.99, 0.47, 0.58, 1)
     }
-
   </style>
 
   <script>
+    const hands =
+      {
+        second: document.querySelector('.second-hand'),
+        hour: document.querySelector('.hour-hand'),
+        min: document.querySelector('.min-hand')
+      };
 
+    let timerId = null;
 
+    function start() {
+      timerId = setInterval(setDate, 1000);
+    }
+
+    function stop() {
+      if(timerId)
+        clearInterval(timerId);
+    }
+
+    function setDate() {
+      let now = new Date();
+      let sDegree = ((now.getSeconds() / 60) * 360) + 90;
+      let mDegree = ((now.getMinutes() / 360) * 360) + 90;
+      let hDegree = ((now.getHours() / 12) * 360) + 90;
+      setDegree(hands.second, sDegree);
+      setDegree(hands.min, mDegree);
+      setDegree(hands.hour, hDegree);
+    }
+
+    function setDegree(el, targetDeg) {
+      let deg = el.getAttribute('data-deg');
+      if(parseFloat(deg) > parseFloat(targetDeg)) {
+        el.style.transition = '';
+      } else {
+        el.style.transition = '0.5s';
+      }
+      el.setAttribute('data-deg', targetDeg);
+      el.style.transform = `rotate(${targetDeg}deg)`;
+    }
   </script>
 </body>
+
 </html>
