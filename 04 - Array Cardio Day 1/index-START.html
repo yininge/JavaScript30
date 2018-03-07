@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Array Cardio 💪</title>
 </head>
+
 <body>
-  <p><em>Psst: have a look at the JavaScript Console</em> 💁</p>
+  <p>
+    <em>Psst: have a look at the JavaScript Console</em> 💁</p>
   <script>
     // Get your shorts on - this is an array workout!
     // ## Array Cardio Day 1
@@ -31,29 +34,73 @@
 
     // Array.prototype.filter()
     // 1. Filter the list of inventors for those who were born in the 1500's
+    let filter = inventors.filter((i) => {
+      return i.year >= 1500 && i.year < 1600
+    }
+    );
+    console.log(filter);
 
     // Array.prototype.map()
     // 2. Give us an array of the inventors' first and last names
+    let names = inventors.map((i) => {
+      return `${i.first} ${i.last}`
+    });
+    console.table(names);
 
     // Array.prototype.sort()
     // 3. Sort the inventors by birthdate, oldest to youngest
+    let oldToYoung = inventors.sort((a, b) => {
+      return a.year > b.year;
+    });
+    console.table(oldToYoung);
 
     // Array.prototype.reduce()
     // 4. How many years did all the inventors live?
+    let livingYears = inventors.reduce((acc, cur) => {
+      return acc + (cur.passed - cur.year);
+    }, 0);
+    console.log(livingYears);
 
     // 5. Sort the inventors by years lived
+    let ageSort = inventors.sort((a, b) => {
+      let age1 = a.passed - a.year;
+      let age2 = b.passed - b.year;
+      return age1 < age2 ? 1 : -1;
+    });
+    console.table(ageSort);
 
     // 6. create a list of Boulevards in Paris that contain 'de' anywhere in the name
     // https://en.wikipedia.org/wiki/Category:Boulevards_in_Paris
-
+    let test = function () {
+      let blvds = [...document.querySelectorAll('div.mw-category a')];
+      let de = blvds
+        .map(el => {
+          return el.text;
+        })
+        .filter(b => b.indexOf('de') >= 0);
+      console.log(de);
+    }
 
     // 7. sort Exercise
     // Sort the people alphabetically by last name
+    let sortName = inventors.sort((a,b) => {
+      return a.last > b.last ? 1 : -1;
+    });
+    console.table(sortName);
 
     // 8. Reduce Exercise
     // Sum up the instances of each of these
-    const data = ['car', 'car', 'truck', 'truck', 'bike', 'walk', 'car', 'van', 'bike', 'walk', 'car', 'van', 'car', 'truck' ];
+    const data = ['car', 'car', 'truck', 'truck', 'bike', 'walk', 'car', 'van', 'bike', 'walk', 'car', 'van', 'car', 'truck'];
+    let counter = data.reduce((result, d) => {
+      if(!result[d]) {
+        result[d] = 0;
+      }
+      result[d]++;
+      return result;
+    },{});
 
+    console.log(counter);
   </script>
 </body>
+
 </html>
