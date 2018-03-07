@@ -21,10 +21,25 @@
   <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500">
 
   <style>
+    :root {
+      --base: #ffc600;
+      --spacing: 10px;
+      --blur: 10px;
+    }
 
     /*
       misc styles, nothing to do with CSS variables
     */
+
+    .hl {
+      color: var(--base);
+    }
+
+    img {
+      padding: var(--spacing);
+      background: var(--base);
+      filter: blur(var(--blur));
+    }
 
     body {
       text-align: center;
@@ -45,6 +60,18 @@
   </style>
 
   <script>
+    const inputs = document.querySelectorAll('input');
+    const img = document.querySelector('img');
+    inputs.forEach(input => {
+      input.addEventListener('change', handleChange);
+      input.addEventListener('mousemove', handleChange);
+    });
+
+    function handleChange(e) {
+      //e.target.value
+      let unit = e.target.dataset.sizing || '';
+      document.documentElement.style.setProperty(`--${e.target.id}`, `${e.target.value}${unit}`);
+    }
   </script>
 
 </body>
