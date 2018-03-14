@@ -32,7 +32,6 @@
   function displayCities() {
     let stringToMatch = this.value;
     let result =  searchCities(stringToMatch ,cities);
-    console.log(stringToMatch)
 
     let html = result.map((r) => {
       let reg = new RegExp(stringToMatch, 'gi');
