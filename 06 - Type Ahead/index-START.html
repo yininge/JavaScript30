@@ -15,8 +15,50 @@
     </ul>
   </form>
 <script>
-const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+  const cities = [];
+  const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+  const input = document.querySelector('.search');
+  const suggestions = document.querySelector('.suggestions');
+  input.addEventListener("change", displayCities);
+  input.addEventListener("keyup", displayCities);
 
+  fetch(endpoint
+  ).then((data) => {
+    return data.json();
+  }).then((json) => {
+    cities.push(...json);
+  });
+
+  function displayCities() {
+    let stringToMatch = this.value;
+    let result =  searchCities(stringToMatch ,cities);
+    console.log(stringToMatch)
+
+    let html = result.map((r) => {
+      let reg = new RegExp(stringToMatch, 'gi');
+      let city = r.city.replace(reg, `<span class="hl">${stringToMatch}</span>`);
+      let state = r.state.replace(reg, `<span class="hl">${stringToMatch}</span>`);
+      let pop = formatNumber(r.population);
+      return `
+        <li>
+          <span class="name">${city}, ${state}</span>
+          <span class="population">${pop}</span>
+        </li>
+      `;
+    }).join('');
+    suggestions.innerHTML = html;
+  }
+
+  function formatNumber(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
+
+  function searchCities(stringToMatch, cities) {
+    let reg = new RegExp(stringToMatch, 'gi');
+    return cities.filter((city) => {
+      return city.city.match(reg) || city.state.match(reg);
+    });
+  }
 </script>
   </body>
 </html>
