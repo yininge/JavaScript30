@@ -99,6 +99,30 @@
   </div>
 
 <script>
+  let ckboxs = document.querySelectorAll('input[type=checkbox]');
+  ckboxs.forEach((el) => {
+    el.addEventListener('click', handleEvent)
+  });
+
+  function handleEvent(e) {
+    if(e.shiftKey) {
+      let checked = document.querySelectorAll('input[type=checkbox]:checked');
+      if(checked.length === 2) {
+        let list = [...ckboxs];
+        let start = list.indexOf(checked[0]);
+        let end = list.indexOf(checked[1]);
+        let dirDown = start < end;
+        ckboxs.forEach((ckbox, index) => {
+          if(index >= start && index <= end && dirDown) {
+            ckbox.checked = true;
+          }
+          else if (index >= end && index <= start && !dirDown) {
+            ckbox.checked = true;
+          }
+        });
+      }
+    }
+  }
 </script>
 </body>
 </html>
