@@ -7,6 +7,19 @@
 </head>
 <body>
 <script>
+  let keyword = [];
+  let secret = 'yining';
+
+  document.addEventListener('keydown', e => {
+    if(keyword.length === secret.length) {
+      keyword.shift();
+    }
+    keyword.push(e.key);
+    if(keyword.join('') === secret) {
+      keyword.splice(0);
+      cornify_add();
+    }
+  });
 </script>
 </body>
 </html>
